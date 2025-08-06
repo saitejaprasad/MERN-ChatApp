@@ -16,11 +16,16 @@ import messageRoutes from "./routes/message.route.js";
 
 import { app, server } from "./lib/socket.js";
 
+import { fileURLToPath } from "url";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
 dotenv.config(); //funtion to use or access
 
 const PORT = process.env.PORT || 5001;
 
-const __dirname = path.resolve();
+//const __dirname = path.resolve();
 
 //const app = express();
 
@@ -39,11 +44,18 @@ app.use("/api/messages", messageRoutes);
 
 if (process.env.NODE_ENV === "production") {
   app.use(express.static(path.join(__dirname, "../frontend/dist")));
-
-  app.get("*", (req, res) => {
-    res.sendFile(path.join(__dirname, "../frontend", "dist", "index.html"));
-  });
+  app.get("*", (req, res) =>
+    res.sendFile(path.join(__dirname, "../frontend/dist/index.html"))
+  );
 }
+
+// if (process.env.NODE_ENV === "production") {
+//   app.use(express.static(path.join(__dirname, "../frontend/dist")));
+
+//   app.get("*", (req, res) => {
+//     res.sendFile(path.join(__dirname, "../frontend", "dist", "index.html"));
+//   });
+// }
 
 await connectDB();
 server.listen(PORT, () => {
