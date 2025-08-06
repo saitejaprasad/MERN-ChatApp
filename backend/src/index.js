@@ -44,10 +44,10 @@ app.use("/api/messages", messageRoutes);
 
 if (process.env.NODE_ENV === "production") {
   const reactDist = path.resolve(process.cwd(), "../frontend", "dist");
-
   app.use(express.static(reactDist));
 
-  app.get("*", (req, res) => {
+  // Catches anything not handled above (API or static files)
+  app.use((req, res) => {
     res.sendFile(path.join(reactDist, "index.html"));
   });
 }
